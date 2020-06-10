@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
+
+  </head>
+  <body>
+
+    <!-- Navbar -->
+    <div style = "height:75px;" class="ui olive three item inverted menu">
+      <a class="active item">
+        <h1>TODOS</h1>
+      </a>
+      <a class="item">
+
+      </a>
+      <a class="item">
+
+      </a>
+    </div>
+
+    <div class="ui container">
+
+      <!-- Divider between filter and results section -->
+      <div class="ui divider olive"></div>
+
+      <!-- Tabs -->
+      <div>
+        <div class="ui top attached tabular menu">
+          <a class="item active" data-tab="first">Tasks to be done</a>
+          <a class="item" data-tab="second">Tasks completed</a>
+        </div>
+
+        <!-- Content of first tab -->
+        <div class="ui bottom attached tab segment active" data-tab="first">
+          <div class="results-wrapper">             
+            <% for (var i = 0; i<notCompleted.length; ++i) { %>
+              <div class="ui raised very padded text container segment olive">
+                <%= notCompleted[i] %>
+                <div class="ui checkbox">
+                  <input class= "todoCheckbox" type="checkbox" name="example" value = "<%= notCompleted[i] %>">
+                  <label> </label>
+                </div>
+              </div>                
+            <% } %>
+            <% if (5<1) { %>
+            <h2 class="ui header">10 Results found</h2>
+            <% } %>
+          </div>
+        </div>   
+        <!-- Content of second tab -->
+        <div class="ui bottom attached tab segment" data-tab="second">
+          <% for (var i = 0; i<completed.length; ++i) { %>
+            <div class="ui raised very padded text container segment olive">
+              <%= completed[i] %>
+            </div>                
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      $('.menu .item')
+        .tab()
+      ;
+      $(".todoCheckbox").click(function(){ // error was using arrow function ()=>{} instead of function(){}. Which was why all the headache. In former case, "this" refers to the object that was clicked, but in the latter case, it refers to the jQuery object
+        var tomark = $(this).val();
+        var $t = $(this);
+        console.log(tomark);
+        $.post(
+          "/",
+          {
+            toMarkComplete: tomark
+          },
+          function(data, status){
+            // console.log("Cloning #"+tomark);
+            // $("#brushing).clone().appendTo("[data-tab|='second']");
+            // console.log($cloned);
+            // console.log($this); won't work
+            $cloned = $t.parent().parent().clone();
+            $t.parent().parent().remove();
+            $cloned.find(".checkbox").remove();
+            $(".ui.bottom.attached.tab.segment[data-tab|='second']").append($cloned);
+            console.log($cloned);
+            console.log("Successful");
+          }
+        );
+      })
+    </script>
+  </body>
+</html>
