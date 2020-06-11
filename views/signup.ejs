@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <%- include('./partials/semantic') %>
+    </head>
+    <body>
+        <header>
+            <%- include('./partials/header') %>
+        </header>
+        
+        <div class = "ui container">
+          <h1>Signup</h1>
+            <form class="ui form" action = '/signup' method="post">
+                <!-- <div class="field">
+                  <label>First Name</label>
+                  <input  type="text" name="name" id="name" placeholder="First Name">
+                </div> -->
+                <div class="field">
+                  <label>Email ID</label>
+                  <input type="email" name="emailID" id="emailID" placeholder="Email ID">
+                </div>
+                <div class="field">
+                  <label>Password</label>
+                  <input type="password" name="password" placeholder="Password">
+                </div>
+                <button id = "submit" class="ui olive button" type = "submit">Submit</button>
+            </form>
+    
+
+      
+            <h1>Login</h1>
+            <form class="ui form" action = '/login' method="post">
+                <div class="field">
+                  <label>Email ID</label>
+                  <input type="email" name="emailID" id="emailID" placeholder="Email ID">
+                </div>
+                <div class="field">
+                  <label>Password</label>
+                  <input type="password" name="password" placeholder="Password">
+                </div>
+                <button id = "submit" class="ui olive button" type = "submit">Submit</button>
+            </form>
+        </div>
+        <script src="" async defer></script>
+    </body>
+</html>

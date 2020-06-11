@@ -5,23 +5,13 @@ require('dotenv').config();
 
 app.set('view engine', 'ejs');
 
+const session = require('express-session');
+app.use(session({secret: process.env.SESSIONSECRET ,saveUninitialized: true,resave: true}));
 
-const MongoClient = require('mongodb').MongoClient;
 
-// replace the uri string with your connection string.
-const uri = "mongodb+srv://hello:hello@cluster0-omncj.mongodb.net/<dbname>?retryWrites=true&w=majority"
-MongoClient.connect(uri, function(err, client) {
-   if(err) {
-        console.log('Error occurred while connecting to MongoDB Atlas...\n',err);
-   }
-   console.log('Connected...');
-   const collection = client.db("test").collection("devices");
-   // perform actions on the collection object
-   client.close();
-});
 
 // async function main(){
-//   const uri = "mongodb+srv://hello:hello@cluster0-omncj.mongodb.net/<dbname>?retryWrites=true&w=majority"
+//   const uri = process.env.MONGOURI
 //
 //   const client = new MongoClient(uri);
 //
@@ -51,7 +41,9 @@ const PORT = process.env.PORT || 5000;
 app.use(express.static(__dirname+'/public'));
 
 var todoController = require('./controllers/todoController');
+var userController = require('./controllers/userController');
 todoController(app);
+userController(app);
 
 let server = app.listen(PORT, function(){
   console.log(`Listening on ${ PORT }`);
