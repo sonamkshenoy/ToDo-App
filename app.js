@@ -2,14 +2,7 @@ let express = require('express');
 let app = express();
 require('dotenv').config();
 
-const Pool = require('pg').Pool
-const pool = new Pool({
-  user: 'me',
-  host: 'localhost',
-  database: '',
-  password: '',
-  port: 5433,
-})
+
 
 app.set('view engine', 'ejs');
 
