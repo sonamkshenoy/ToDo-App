@@ -35,7 +35,7 @@ module.exports = function(app){
               }
           
               // Insert a single document, wait for promise so we can read it back
-              const p = await col.insertOne(personDocument);
+              // const p = await col.insertOne(personDocument);
           
               // const record = await col.find();
               // console.log(record);

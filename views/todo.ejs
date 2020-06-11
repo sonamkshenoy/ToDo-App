@@ -140,9 +140,19 @@
       })
 
       $('#addTodo').click(function(){
+          $addedTODO = $("[name|='newTodo']").val();
+          $.post(
+            '/addTodo',
+            {
+              newTodo: $addedTODO
+            },
+            function(data, status){
+              console.log("Adding successful");
+            }
+          )
           // console.log("I am fired!");
           console.log($("[name|='newTodo']").val());
-          $addedTODO = $("[name|='newTodo']").val();
+          
           $(".results-wrapper").append("<div class='ui raised very padded text container segment olive'>"+ $addedTODO +"<div class='ui checkbox'><input class= 'todoCheckbox' type='checkbox' name='example' value = '"+ $addedTODO +"'><label></label></div></div>"); 
       })
     </script>
