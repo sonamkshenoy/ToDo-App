@@ -70,10 +70,59 @@
         .tab()
       ;
 
+      // var functionToDelete = function(element){
+      //   var tomark = element.value;
+      //   var $t = element;
+      //   console.log("Marking"+tomark);
+      //   $.post(
+      //     "/mylist",
+      //     {
+      //       toMarkComplete: tomark
+      //     },
+      //     function(data, status){
+      //       // console.log("Cloning #"+tomark);
+      //       // $("#brushing).clone().appendTo("[data-tab|='second']");
+      //       // console.log($cloned);
+      //       // console.log($this); won't work
+      //       $cloned = $t.parent().parent().clone();
+      //       $t.parent().parent().remove();
+      //       $cloned.find(".checkbox").remove();
+      //       $(".ui.bottom.attached.tab.segment[data-tab|='second']").append($cloned);
+      //       console.log($cloned);
+      //       console.log("Successful");
+      //     }
+      //   );
+      // };
+
+      // $(".todoCheckbox").click(function(){ // error was using arrow function ()=>{} instead of function(){}. Which was why all the headache. In former case, "this" refers to the object that was clicked, but in the latter case, it refers to the jQuery object
+      //   var tomark = $(this).val();
+      //   var $t = $(this);
+      //   console.log(tomark);
+      //   $.post(
+      //     "/mylist",
+      //     {
+      //       toMarkComplete: tomark
+      //     },
+      //     function(data, status){
+      //       // console.log("Cloning #"+tomark);
+      //       // $("#brushing).clone().appendTo("[data-tab|='second']");
+      //       // console.log($cloned);
+      //       // console.log($this); won't work
+      //       $cloned = $t.parent().parent().clone();
+      //       $t.parent().parent().remove();
+      //       $cloned.find(".checkbox").remove();
+      //       $(".ui.bottom.attached.tab.segment[data-tab|='second']").append($cloned);
+      //       console.log($cloned);
+      //       console.log("Successful");
+      //     }
+      //   );
+      // })
+
 
       // mark a not completed todo as done
 
-      $('.results-wrapper').on("click",".todoCheckbox", function(){ 
+      // use document as the (parent) instead of ('.results-wrapper') if not sure where the child will be appended. This way this event attached to entire document and will fire everytime there is a click provided the click bubbles from the target
+      $('.results-wrapper').on("click",".todoCheckbox", function(){ // error was using arrow function ()=>{} instead of function(){}. Which was why all the headache. In former case, "this" refers to the object that was clicked, but in the latter case, it refers to the jQuery object
         var tomark = $(this).val();
         var $t = $(this);
         console.log(tomark);
@@ -83,11 +132,20 @@
             toMarkComplete: tomark
           },
           function(data, status){
+            // console.log("Cloning #"+tomark);
+            // $("#brushing).clone().appendTo("[data-tab|='second']");
+            // console.log($cloned);
+            // console.log($this); won't work
 
-            $cloned = "<div class='ui raised very padded text container segment olive'>" + tomark + "<button style = 'float:right' class='addBack ui olive button' type='button' value = '" + tomark + "'>Mark not done</button><button style = 'float:right' class='Cdelete ui red button' type='button' value = '" + tomark + "'>X</button></div>";
+            /* Worked correctly for the checkbox
+            $cloned = $t.parent().parent().clone();
+            $t.parent().parent().remove();
+            $cloned.find(".checkbox").remove();
+            */
 
-            // $(".ui.bottom.attached.tab.segment[data-tab|='second']").append($cloned);
-            $('.resultsNot-wrapper').append($cloned);
+            $cloned = "<div class='ui raised very padded text container segment olive'>" + tomark + "<button style = 'float:right' class='addBack ui olive button' type='button' value = '<%= completed[i] %>'>Mark not done</button><button style = 'float:right' class='Cdelete ui red button' type='button' value = '" + tomark + "'>X</button></div>";
+
+            $(".ui.bottom.attached.tab.segment[data-tab|='second']").append($cloned);
             console.log($cloned);
             console.log("Successful");
           }
@@ -103,7 +161,6 @@
               newTodo: $addedTODO
             },
             function(data, status){
-              console.log(data,status);
               console.log("Adding successful");
             }
           )
@@ -158,7 +215,7 @@
             toaddBackTodo: $toaddBackTodo
           },
           function(data, status){
-            console.log("marked");
+            console.log("deleted");
             $t.parent().remove();
             $(".results-wrapper").append("<div class='ui raised very padded text container segment olive'>"+ $toaddBackTodo +"<button style = 'float:right' class='todoCheckbox delete ui olive button' type='button' value = '"+ $toaddBackTodo +"'>Mark done</button><button style = 'float:right' class='delete ui red button' type='button' value = '" + $toaddBackTodo + "' >X</button></div>"); 
           }

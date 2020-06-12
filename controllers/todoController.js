@@ -63,7 +63,7 @@ module.exports = function(app){
       var results = await pool.query('SELECT userid FROM users WHERE emailid = $1', [sess.email]);
       var userid = results.rows[0]['userid'];
       console.log("Query result",results.rows[0]['userid']);
-      result = await pool.query('INSERT INTO completed VALUES ($1, $2)', [userid, req.body.toMarkComplete]);
+      result = await pool.query('INSERT INTO completed(userid, todoItem) VALUES ($1, $2)', [userid, req.body.toMarkComplete]);
       result = await pool.query('DELETE FROM notcompleted WHERE todoitem = $1', [req.body.toMarkComplete]);
     }
     toMarkCompleteTodo();
@@ -76,20 +76,24 @@ module.exports = function(app){
     const sess = req.session;
 
     var userid;
-    pool.query('SELECT userid FROM users WHERE emailid = $1', [sess.email], (error, results) => {
-      if (error) {
-        throw error
-      }
-      userid = results.rows[0]['userid'];
-      console.log("Query result",results.rows[0]['userid']);
-      pool.query('INSERT INTO notcompleted VALUES ($1, $2)', [userid, req.body.newTodo], (error, results) => {
+    
+      pool.query('SELECT userid FROM users WHERE emailid = $1', [sess.email], (error, results) => {
         if (error) {
-          throw error
+          throw error;
         }
-        console.log("insertiong to todos successful");
+        userid = results.rows[0]['userid'];
+        console.log("Query result",results.rows[0]['userid']);
+        
+          pool.query('INSERT INTO notcompleted(userid, todoItem) VALUES ($1, $2)', [userid, req.body.newTodo], (error, results) => {
+            if (error) {
+              throw error;
+            }
+            console.log("insertiong to todos successful");
+          });
+       
       });
-    });
-    return res.status(200).send("successful");
+      return res.status(200).send("successful");
+    
   })
 
   app.post('/deleteFromNotComplete', function(req, res){
@@ -116,13 +120,13 @@ module.exports = function(app){
   app.post('/addBack', function(req, res){
     var sess = req.session;
     
-    console.log(req.body.toMarkComplete);
+    console.log(req.body.toaddBackTodo);
 
     async function toMarkNotCompleteTodo(){
       var results = await pool.query('SELECT userid FROM users WHERE emailid = $1', [sess.email]);
       var userid = results.rows[0]['userid'];
       console.log("Query result",results.rows[0]['userid']);
-      result = await pool.query('INSERT INTO notcompleted VALUES ($1, $2)', [userid, req.body.toaddBackTodo]);
+      result = await pool.query('INSERT INTO notcompleted(userid, todoItem) VALUES ($1, $2)', [userid, req.body.toaddBackTodo]);
       result = await pool.query('DELETE FROM completed WHERE todoitem = $1', [req.body.toaddBackTodo]);
     }
     toMarkNotCompleteTodo();

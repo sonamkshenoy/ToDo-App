@@ -29,21 +29,44 @@ module.exports = function(app){
         console.log("User details posted");
         var sess = req.session;
         
-        // console.log(req.body.emailID);
+        console.log(req.body.emailID);
         
         async function checkAndSignup(){
             var result = await pool.query('SELECT * FROM users WHERE emailid = $1',[req.body.emailID]);
 
             // console.log("count", result);
-            // console.log("count", result.rows.length);
+            console.log("count", result.rows.length);
 
             result = result.rows.length;
+            
+            /*
+            async function comparePasswords(){
+                var password = req.body.password;
+                
+                
+                
+                // Won't work, since not returning promise. Right way is below:
+                // await bcrypt.hash(password, saltRounds, function(err, hash) {
+                //     console.log(hash);
+                //     password = hash;
+                // });
+                
+
+                var password = await bcrypt.hash(password, saltRounds);
+
+                bcrypt.compare(req.body.password, password, function(err, result) {
+                    console.log("Compare hashes",result);
+                });
+            }
+            comparePasswords();
+            */
+
 
             if(result == 0){
 
                 var password = await bcrypt.hash(req.body.password, saltRounds);
 
-                // console.log("Signup password", password);
+                console.log("Signup password", password);
 
                 pool.query('INSERT INTO users (emailid, password) VALUES ($1, $2)', [req.body.emailID, password], (error, results) => {
                     if (error) {
@@ -71,23 +94,24 @@ module.exports = function(app){
         var email = req.body.emailID;
         var password = req.body.password;
 
-        // here completely used callback-promise instead of async-await
+        // here using callback-promise instead of async-await
 
         bcrypt.hash(password, saltRounds)
         .then((password)=>{
             console.log("not same?",password);
         });
             
+        //     console.log("Same password?",password);
         pool.query('SELECT * FROM users WHERE emailid = $1',[email]).then((results, error)=>{
             if(error)
             throw error;
 
-            // console.log(results.rows.length);
-            // console.log(results);
+            console.log(results.rows.length);
+            console.log(results);
             if(results.rows.length>0){
 
                 bcrypt.compare(req.body.password, results.rows[0].password, function(err, result) {
-                    // console.log("Compare hashes",result);
+                    console.log("Compare hashes",result);
                     if(result){
                         var sess = req.session; 
                         sess.email = email;
@@ -106,13 +130,5 @@ module.exports = function(app){
         });
             // console.log(sess.email);
         // });
-    })
-
-    // In case, user tries to go to these API endpoints
-    app.get('/login', function(req, res){
-        res.redirect('/');
-    })
-    app.get('/signup', function(req, res){
-        res.redirect('/');
     })
 }
