@@ -19,7 +19,8 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "mongodb": "^3.5.8",
-    "pg": "^8.2.1"
+    "pg": "^8.2.1",
+    "simple-node-logger": "^18.12.24"
   },
   "engines": {
     "node": "12.x"

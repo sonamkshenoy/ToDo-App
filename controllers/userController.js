@@ -14,6 +14,10 @@ const pool = new Pool({
     port: process.env.POSTGRES_PORT,
   })
 
+// Log
+const log = require('simple-node-logger').createSimpleFileLogger('project.log');
+log.setLevel('info');
+
 module.exports = function(app){
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
@@ -26,39 +30,46 @@ module.exports = function(app){
 
     // signup user
     app.post('/signup', function(req, res){
-        console.log("User details posted");
+        // console.log("User details posted");
+        log.info("User details posted");
         var sess = req.session;
         
         // console.log(req.body.emailID);
         
         async function checkAndSignup(){
-            var result = await pool.query('SELECT * FROM users WHERE emailid = $1',[req.body.emailID]);
+            try{
+                var result = await pool.query('SELECT * FROM users WHERE emailid = $1',[req.body.emailID]);
 
-            // console.log("count", result);
-            // console.log("count", result.rows.length);
+                // console.log("count", result);
+                // console.log("count", result.rows.length);
 
-            result = result.rows.length;
+                result = result.rows.length;
 
-            if(result == 0){
+                if(result == 0){
 
-                var password = await bcrypt.hash(req.body.password, saltRounds);
+                    var password = await bcrypt.hash(req.body.password, saltRounds);
 
-                // console.log("Signup password", password);
+                    // console.log("Signup password", password);
 
-                pool.query('INSERT INTO users (emailid, password) VALUES ($1, $2)', [req.body.emailID, password], (error, results) => {
-                    if (error) {
-                      throw error
-                    }
-                    console.log("successful")
-                  })
-                // only need to create session of emailID, not password
-                sess.email = req.body.emailID;
-                console.log(sess.email);
-                return res.redirect('/myList');
+                    pool.query('INSERT INTO users (emailid, password) VALUES ($1, $2)', [req.body.emailID, password], (error, results) => {
+                        if (error) {
+                        log.error(error)
+                        }
+                        // console.log("successful")
+                        log.info(sess.email,"user saved successfully");
+                    })
+                    // only need to create session of emailID, not password
+                    sess.email = req.body.emailID;
+                    // console.log(sess.email);
+                    return res.redirect('/myList');
+                }
+                else{
+                    var userNotPresent;
+                    res.render('signup',{'userPresent':'User already exists','userNotPresent':userNotPresent});
+                }
             }
-            else{
-                var userNotPresent;
-                res.render('signup',{'userPresent':'User already exists','userNotPresent':userNotPresent});
+            catch(err){
+                log.error(err);
             }
         }
         
@@ -73,14 +84,14 @@ module.exports = function(app){
 
         // here completely used callback-promise instead of async-await
 
-        bcrypt.hash(password, saltRounds)
-        .then((password)=>{
-            console.log("not same?",password);
-        });
+        // bcrypt.hash(password, saltRounds)
+        // .then((password)=>{
+        //     console.log("not same?",password);
+        // });
             
         pool.query('SELECT * FROM users WHERE emailid = $1',[email]).then((results, error)=>{
             if(error)
-            throw error;
+            log.error('Database SELECT error during login', error);
 
             // console.log(results.rows.length);
             // console.log(results);
