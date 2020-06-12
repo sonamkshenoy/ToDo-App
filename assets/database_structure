@@ -1,7 +1,7 @@
 # DATABASE TABLES (3 tables): 
-i) users
-ii) completed
-iii) notCompleted
+i) users (stores credentials i.e. email id and hashed password of each user)
+ii) completed (stores completed tasks of each user - a multivalues field)
+iii) notCompleted (stores incomplete tasks of each user - a multivalued field)
 
 SQL QUERIES
 
@@ -10,8 +10,7 @@ Userid SERIAL,
 Emailid VARCHAR(50) NOT NULL,
 Password VARCHAR(30) NOT NULL,
 PRIMARY KEY(Userid)
-)
-;
+);
 
 CREATE TABLE completed(
 todoid SERIAL,
