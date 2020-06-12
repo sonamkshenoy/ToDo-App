@@ -38,11 +38,12 @@
             <% for (var i = 0; i<notCompleted.length; ++i) { %>
               <div class="ui raised very padded text container segment olive">
                 <%= notCompleted[i] %>
-                <div class="ui checkbox">
+                <!-- <div class="ui checkbox">
                   <input class= "todoCheckbox" type="checkbox" name="example" value = "<%= notCompleted[i] %>">
                   <label> </label>
-                </div>
-                <button class="delete ui red button" type="button" value = "<%= notCompleted[i] %>"">X</button>
+                </div> -->
+                <button style = "float:right" class="todoCheckbox delete ui olive button" type="button" value = "<%= notCompleted[i] %>">Mark done</button>
+                <button style = "float:right" class="delete ui red button" type="button" value = "<%= notCompleted[i] %>">X</button>
               </div>                
             <% } %>
             <% if (5<1) { %>
@@ -56,8 +57,8 @@
             <% for (var i = 0; i<completed.length; ++i) { %>
               <div class="ui raised very padded text container segment olive">
                 <%= completed[i] %>
-                <button class="addBack ui olive button" type="button" value = "<%= completed[i] %>"">Mark not done</button>
-                <button class="Cdelete ui red button" type="button" value = "<%= completed[i] %>"">X</button>
+                <button style = "float:right" class="addBack ui olive button" type="button" value = "<%= completed[i] %>">Mark not done</button>
+                <button style = "float:right" class="Cdelete ui red button" type="button" value = "<%= completed[i] %>">X</button>
               </div>                
             <% } %>
         </div>
@@ -135,9 +136,15 @@
             // $("#brushing).clone().appendTo("[data-tab|='second']");
             // console.log($cloned);
             // console.log($this); won't work
+
+            /* Worked correctly for the checkbox
             $cloned = $t.parent().parent().clone();
             $t.parent().parent().remove();
             $cloned.find(".checkbox").remove();
+            */
+
+            $cloned = "<div class='ui raised very padded text container segment olive'>" + tomark + "<button style = 'float:right' class='addBack ui olive button' type='button' value = '<%= completed[i] %>'>Mark not done</button><button style = 'float:right' class='Cdelete ui red button' type='button' value = '" + tomark + "'>X</button></div>";
+
             $(".ui.bottom.attached.tab.segment[data-tab|='second']").append($cloned);
             console.log($cloned);
             console.log("Successful");
@@ -160,7 +167,7 @@
           // console.log("I am fired!");
           console.log($("[name|='newTodo']").val());
           
-          $(".results-wrapper").append("<div class='ui raised very padded text container segment olive'>"+ $addedTODO +"<div class='ui checkbox'><input class= 'todoCheckbox' type='checkbox' name='example' value = '"+ $addedTODO +"'><label></label></div><button class='delete ui red button' type='button' value = '" + $addedTODO + "' >X</button></div>"); 
+          $(".results-wrapper").append("<div class='ui raised very padded text container segment olive'>"+ $addedTODO +"<button style = 'float:right' class='todoCheckbox delete ui olive button' type='button' value = '"+ $addedTODO +"'>Mark done</button><button style = 'float:right' class='delete ui red button' type='button' value = '" + $addedTODO + "' >X</button></div>"); 
       })
 
       //  Delete a todo from not completed tasks
@@ -210,7 +217,7 @@
           function(data, status){
             console.log("deleted");
             $t.parent().remove();
-            $(".results-wrapper").append("<div class='ui raised very padded text container segment olive'>"+ $toaddBackTodo +"<div class='ui checkbox'><input class= 'todoCheckbox' type='checkbox' name='example' value = '"+ $toaddBackTodo +"'><label></label></div><button class='delete ui red button' type='button' value = '" + $toaddBackTodo + "' >X</button></div>"); 
+            $(".results-wrapper").append("<div class='ui raised very padded text container segment olive'>"+ $toaddBackTodo +"<button style = 'float:right' class='todoCheckbox delete ui olive button' type='button' value = '"+ $toaddBackTodo +"'>Mark done</button><button style = 'float:right' class='delete ui red button' type='button' value = '" + $toaddBackTodo + "' >X</button></div>"); 
           }
         )
       })
