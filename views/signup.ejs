@@ -29,7 +29,10 @@
                   <input type="password" name="password" placeholder="Password">
                 </div>
                 <button id = "submit" class="ui olive button" type = "submit">Submit</button>
-            </form>
+                <% if(userPresent){ %>
+                  <p style = 'color:red;'> <%= userPresent %> </p>
+                <% } %>
+              </form>
     
 
       
@@ -44,7 +47,10 @@
                   <input type="password" name="password" placeholder="Password">
                 </div>
                 <button id = "submit" class="ui olive button" type = "submit">Submit</button>
-            </form>
+                <% if(userNotPresent){ %>
+                  <p style = 'color:red;'> <%= userNotPresent %> </p>
+                <% } %>
+             </form>
         </div>
         <script src="" async defer></script>
     </body>

@@ -13,7 +13,7 @@
     </header>    
 
     <div class="ui container">
-      <form class="ui form">
+      <form id = "addTodoField" class="ui form">
         <div class="field">
           <label>Add a Todo</label>
           <input type="text" name="newTodo" placeholder="Add a Todo!">
@@ -221,6 +221,15 @@
           }
         )
       })
+
+      // Add todo enter should trigger button
+      var input = document.getElementById("addTodoField");
+      input.addEventListener("keypress", function(event) {
+        if (event.keyCode === 13) {
+          event.preventDefault();
+          document.getElementById("addTodo").click();
+        }
+      }); 
     </script>
   </body>
 </html>
