@@ -56,7 +56,7 @@ module.exports = function(app){
 
             console.log(results.rows.length);
             if(results.rows.length>0){
-                var sess = req.session; 
+                var sess = req.session; // HAHA, basically forgot to create session on successful authentication, so though it was redirecting to myList, that page was redirecting to home page (/). Nice joke! At least learnt to write .then()
                 sess.email = email;
                 return res.redirect('/myList');
             }

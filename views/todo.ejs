@@ -42,6 +42,7 @@
                   <input class= "todoCheckbox" type="checkbox" name="example" value = "<%= notCompleted[i] %>">
                   <label> </label>
                 </div>
+                <button class="delete ui red button" type="button" value = "<%= notCompleted[i] %>"">X</button>
               </div>                
             <% } %>
             <% if (5<1) { %>
@@ -51,11 +52,15 @@
         </div>   
         <!-- Content of second tab -->
         <div class="ui bottom attached tab segment" data-tab="second">
-          <% for (var i = 0; i<completed.length; ++i) { %>
-            <div class="ui raised very padded text container segment olive">
-              <%= completed[i] %>
-            </div>                
-          <% } %>
+          <div class = "resultsNot-wrapper">
+            <% for (var i = 0; i<completed.length; ++i) { %>
+              <div class="ui raised very padded text container segment olive">
+                <%= completed[i] %>
+                <button class="addBack ui olive button" type="button" value = "<%= completed[i] %>"">Mark not done</button>
+                <button class="Cdelete ui red button" type="button" value = "<%= completed[i] %>"">X</button>
+              </div>                
+            <% } %>
+        </div>
         </div>
       </div>
     </div>
@@ -113,6 +118,8 @@
       // })
 
 
+      // mark a not completed todo as done
+
       // use document as the (parent) instead of ('.results-wrapper') if not sure where the child will be appended. This way this event attached to entire document and will fire everytime there is a click provided the click bubbles from the target
       $('.results-wrapper').on("click",".todoCheckbox", function(){ // error was using arrow function ()=>{} instead of function(){}. Which was why all the headache. In former case, "this" refers to the object that was clicked, but in the latter case, it refers to the jQuery object
         var tomark = $(this).val();
@@ -138,6 +145,7 @@
         );
       })
 
+      // Adding a new todo
       $('#addTodo').click(function(){
           $addedTODO = $("[name|='newTodo']").val();
           $.post(
@@ -152,7 +160,59 @@
           // console.log("I am fired!");
           console.log($("[name|='newTodo']").val());
           
-          $(".results-wrapper").append("<div class='ui raised very padded text container segment olive'>"+ $addedTODO +"<div class='ui checkbox'><input class= 'todoCheckbox' type='checkbox' name='example' value = '"+ $addedTODO +"'><label></label></div></div>"); 
+          $(".results-wrapper").append("<div class='ui raised very padded text container segment olive'>"+ $addedTODO +"<div class='ui checkbox'><input class= 'todoCheckbox' type='checkbox' name='example' value = '"+ $addedTODO +"'><label></label></div><button class='delete ui red button' type='button' value = '" + $addedTODO + "' >X</button></div>"); 
+      })
+
+      //  Delete a todo from not completed tasks
+      $('.results-wrapper').on("click",".delete", function(){
+        $toDeleteTodo = $(this).val();
+        console.log($toDeleteTodo);
+        $t = $(this);
+        $.post(
+          '/deleteFromNotComplete',
+          {
+            toDeleteTodo: $toDeleteTodo
+          },
+          function(data, status){
+            console.log("deleted");
+            $t.parent().remove();
+          }
+        )
+      })
+
+      // Delete todo from completed tasks
+      $('.resultsNot-wrapper').on("click",".Cdelete", function(){
+        $toDeleteTodo = $(this).val();
+        console.log($toDeleteTodo);
+        $t = $(this);
+        $.post(
+          '/deleteFromComplete',
+          {
+            toDeleteTodo: $toDeleteTodo
+          },
+          function(data, status){
+            console.log("deleted");
+            $t.parent().remove();
+          }
+        )
+      })
+
+      // Re-mark a completed task as not done
+      $('.resultsNot-wrapper').on("click",".addBack", function(){
+        $toaddBackTodo = $(this).val();
+        console.log($toaddBackTodo);
+        $t = $(this);
+        $.post(
+          '/addBack',
+          {
+            toaddBackTodo: $toaddBackTodo
+          },
+          function(data, status){
+            console.log("deleted");
+            $t.parent().remove();
+            $(".results-wrapper").append("<div class='ui raised very padded text container segment olive'>"+ $toaddBackTodo +"<div class='ui checkbox'><input class= 'todoCheckbox' type='checkbox' name='example' value = '"+ $toaddBackTodo +"'><label></label></div><button class='delete ui red button' type='button' value = '" + $toaddBackTodo + "' >X</button></div>"); 
+          }
+        )
       })
     </script>
   </body>
