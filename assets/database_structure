@@ -1,0 +1,29 @@
+# DATABASE TABLES (3 tables): 
+i) users
+ii) completed
+iii) notCompleted
+
+SQL QUERIES
+
+CREATE TABLE users(
+Userid SERIAL,
+Emailid VARCHAR(50) NOT NULL,
+Password VARCHAR(30) NOT NULL,
+PRIMARY KEY(Userid)
+)
+;
+
+CREATE TABLE completed(
+todoid SERIAL,
+userid INT NOT NULL,
+todoitem VARCHAR(500),
+PRIMARY KEY(todoid)
+);
+
+CREATE TABLE notCompleted(
+todoid SERIAL,
+userid INT NOT NULL,
+todoitem VARCHAR(500),
+PRIMARY KEY(todoid)
+);
+
